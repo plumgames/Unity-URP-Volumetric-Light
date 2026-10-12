@@ -14,9 +14,6 @@ using UnityEngine.Rendering.Universal;
 #else
 [VolumeComponentMenuForRenderPipeline("Custom/Volumetric Fog", typeof(UniversalRenderPipeline))]
 #endif
-#if UNITY_6000_3_OR_NEWER
-[DisplayInfo(name = "Volumetric Fog")]
-#endif
 public sealed class VolumetricFogVolumeComponent : VolumeComponent, IPostProcessComponent
 {
 	#region Public Attributes
@@ -77,14 +74,10 @@ public sealed class VolumetricFogVolumeComponent : VolumeComponent, IPostProcess
 
 	#region Initialization Methods
 
-#if !UNITY_6000_3_OR_NEWER
-
 	public VolumetricFogVolumeComponent() : base()
 	{
 		displayName = "Volumetric Fog";
 	}
-
-#endif
 
 	#endregion
 

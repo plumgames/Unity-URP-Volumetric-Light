@@ -112,14 +112,10 @@ public sealed class VolumetricFogRenderPass : ScriptableRenderPass
 	private Material downsampleDepthMaterial;
 	private Material volumetricFogMaterial;
 
-#if !UNITY_6000_4_OR_NEWER
-
 	private RTHandle downsampledCameraDepthRTHandle;
 	private RTHandle volumetricFogRenderRTHandle;
 	private RTHandle volumetricFogBlurRTHandle;
 	private RTHandle volumetricFogUpsampleCompositionRTHandle;
-
-#endif
 
 	private ProfilingSampler downsampleDepthProfilingSampler;
 
@@ -164,16 +160,13 @@ public sealed class VolumetricFogRenderPass : ScriptableRenderPass
 
 	#region Scriptable Render Pass Methods
 
-#if !UNITY_6000_4_OR_NEWER
-
 	/// <summary>
 	/// <inheritdoc/>
 	/// </summary>
 	/// <param name="cmd"></param>
 	/// <param name="renderingData"></param>
-#if UNITY_6000_0_OR_NEWER
+#if !UNITY_6000_0_OR_NEWER
 	[Obsolete]
-#endif
 	public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
 	{
 		base.OnCameraSetup(cmd, ref renderingData);
@@ -196,18 +189,17 @@ public sealed class VolumetricFogRenderPass : ScriptableRenderPass
 		cameraTargetDescriptor.width = originalResolution.x;
 		cameraTargetDescriptor.height = originalResolution.y;
 		cameraTargetDescriptor.colorFormat = originalColorFormat;
-		cameraTargetDescriptor.graphicsFormat = renderingData.cameraData.cameraTargetDescriptor.graphicsFormat;
 		ReAllocateIfNeeded(ref volumetricFogUpsampleCompositionRTHandle, cameraTargetDescriptor, wrapMode: TextureWrapMode.Clamp, name: VolumetricFogUpsampleCompositionRTName);
 	}
+#endif
 
 	/// <summary>
 	/// <inheritdoc/>
 	/// </summary>
 	/// <param name="context"></param>
 	/// <param name="renderingData"></param>
-#if UNITY_6000_0_OR_NEWER
+#if !UNITY_6000_0_OR_NEWER
 	[Obsolete]
-#endif
 	public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
 	{
 		CommandBuffer cmd = CommandBufferPool.Get();
@@ -244,7 +236,6 @@ public sealed class VolumetricFogRenderPass : ScriptableRenderPass
 
 		CommandBufferPool.Release(cmd);
 	}
-
 #endif
 
 #if UNITY_6000_0_OR_NEWER
@@ -474,7 +465,6 @@ public sealed class VolumetricFogRenderPass : ScriptableRenderPass
 		cameraTargetDescriptor.width = originalResolution.x;
 		cameraTargetDescriptor.height = originalResolution.y;
 		cameraTargetDescriptor.colorFormat = originalColorFormat;
-		cameraTargetDescriptor.graphicsFormat = cameraData.cameraTargetDescriptor.graphicsFormat;
 		volumetricFogUpsampleCompositionTarget = UniversalRenderer.CreateRenderGraphTexture(renderGraph, cameraTargetDescriptor, VolumetricFogUpsampleCompositionRTName, false);
 	}
 
@@ -520,8 +510,6 @@ public sealed class VolumetricFogRenderPass : ScriptableRenderPass
 
 #endif
 
-#if !UNITY_6000_4_OR_NEWER
-
 	/// <summary>
 	/// Re-allocate fixed-size RTHandle if it is not allocated or doesn't match the descriptor.
 	/// </summary>
@@ -548,8 +536,6 @@ public sealed class VolumetricFogRenderPass : ScriptableRenderPass
 		volumetricFogBlurRTHandle?.Release();
 		volumetricFogUpsampleCompositionRTHandle?.Release();
 	}
-
-#endif
 
 	#endregion
 }

@@ -61,9 +61,8 @@ public sealed class VolumetricFogRendererFeature : ScriptableRendererFeature
 	{
 		base.Dispose(disposing);
 
-#if !UNITY_6000_4_OR_NEWER
 		volumetricFogRenderPass?.Dispose();
-#endif
+
 		CoreUtils.Destroy(downsampleDepthMaterial);
 		CoreUtils.Destroy(volumetricFogMaterial);
 	}
